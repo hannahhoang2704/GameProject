@@ -59,7 +59,7 @@ def text_effect(text):
         sys.stdout.write(char)
 
 
-#Function to search the city
+#Function 1: to search the city
 
 def municipality_search(city):
     sql = "SELECT ident, name FROM airport"
@@ -74,9 +74,9 @@ def municipality_search(city):
     return
 
 
-#Function to call the airport in the chosen city
+#Function 2: to call the airport in the chosen city
 
-def call_airport(icao): #NEED TO CHECKED
+def call_airport(icao):                                                                                 #NEED TO CHECKED!!!!!!
     sql = "SELECT name FROM airport"
     sql += " WHERE ident='" + icao + "'"
     #print(sql)
@@ -88,7 +88,7 @@ def call_airport(icao): #NEED TO CHECKED
             print(f"You are now in {row[0]} and ready for your flight!")
     return row[0]
 
-#Function to measure the distance between the chosen airport to Rovaniemi airport
+#Function 3: to measure the distance between the chosen airport to Rovaniemi airport
 
 def airport_position(ICAO):
     sql = "SELECT name, latitude_deg, longitude_deg from airport"
@@ -105,7 +105,7 @@ def airport_position(ICAO):
     return deg
 
 
-#Function to call score affected by weather
+#Function 4: to call score affected by weather                                                     #NEED TO CHECKED!!!!!!
 
 def weather(score):
     score = random.randint(4, 8)
@@ -184,7 +184,46 @@ destinations = 5
 
 used_index = []      #Store the used questions' indexes
 
-while co2_consumed < co2_budget:
+while co2_consumed < co2_budget and destinations > 0:
+        #ask questions & get score by answer
+        random_index_number = random.randint(0, len(questions) - 1)
+        print(questions[random_index_number])
+        user_answer = str(input("Give answer: "))
+        right_answer = answers[random_index_number]
+        if user_answer == right_answer:
+            print("correct.")
+            co2_consumed -= 2000
+            print(co2_consumed)
+        # weather(random_weather1)
+        else:
+            print("Wrong")
+            co2_consumed += 2500
+            print(co2_consumed)
+        destinations -= 1
+else:
+    print("Done!")
+
+#PROBLEM 1: Can't define who win the game, who lost the game
+#PROBLEM 2: How to call random question and avoid duplicate question again
+
+
+
+
+
+#TASK NEED TO BE DONE: 
+#Task 1: Update question list: more questions, give users idea to put T/F, Y/N, A/B/C/D
+#Task 2: How to call the different score in random weather and add on the co2consumed Score (fix the function 4: function called weather)
+#Task 3: fix the function 2 called call_airport since it prints 2 times instead of 1 time (Arijana you can tried to change your code like the way you usual call sql instead of my way. Maybe it helps)
+#Task 4: make a while loop statement in every input part so if player dont answer yes/no or don't input the result as we expect, the question is asked again until they answer as we want to proceed to next step
+
+
+
+
+
+
+
+#DRAFT TO REUSE WHEN NEEDED, not a code to run in program
+"""while co2_consumed < co2_budget:
     for x in range(destinations):
         random_index_number = random.randint(0, len(questions) - 1)
         print(questions[random_index_number])
@@ -200,7 +239,7 @@ while co2_consumed < co2_budget:
             co2_consumed += 2000
             print(co2_consumed)
 else:
-    print("Game over!")
+    print("Game over!")"""
 
 #call Random question
 """
