@@ -182,7 +182,7 @@ co2_budget = 10000
 co2_consumed = 5000
 destinations = 5
 
-used_index = []      #Store the used questions' indexes
+used_index = []      #Store the used questions' indexes to avoid duplicate questions
 
 while co2_consumed < co2_budget and destinations > 0:
         #ask question & get point by answer
@@ -251,7 +251,7 @@ else:
 """
 random_index_number = random.randint(0, len(questions)-1)
 
-if random_index_number not in used_index:
+if random_index_number not in used_index:                               #TO AVOID DUPLICATE QUESTIONS
     print(questions[]) #Random questions
     used_index.append(random_index_number) #Insert the used question's index in the list
     print(used_index)
