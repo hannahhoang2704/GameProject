@@ -185,7 +185,7 @@ destinations = 5
 used_index = []      #Store the used questions' indexes
 
 while co2_consumed < co2_budget and destinations > 0:
-        #ask questions & get score by answer
+        #ask question & get point by answer
         random_index_number = random.randint(0, len(questions) - 1)
         print(questions[random_index_number])
         user_answer = str(input("Give answer: "))
@@ -201,19 +201,25 @@ while co2_consumed < co2_budget and destinations > 0:
             print(co2_consumed)
         destinations -= 1
 else:
-    print("Done!")
+    if co2_consumed > co2_budget:
+        print("co2_consumed > co2_budget")
+    else:
+        print(f"{co2_consumed} & you passed 5 destinations. WIN!")
 
-#PROBLEM 1: Can't define who win the game, who lost the game
-#PROBLEM 2: How to call random question and avoid duplicate question again
+
+#PROBLEM 1: Can't define who win the game, who lost the game --> DONE (Run more test to check further)
+#PROBLEM 2: when player keep answer correctly c02 go to minus point. we don't want it go minus. it need to stay at least >0 so we have to do smt with it 
+#PROBLEM 3: How to call random question and avoid duplicate question again
+#PROBLEM 4: How to add call weather and add score from weather table to co2_consumed score
 
 
 
 
 
 #TASK NEED TO BE DONE: 
-#Task 1: Update question list: more questions, give users idea to put T/F, Y/N, A/B/C/D
+#Task 1: Update question list: more questions, give users idea to put T/F, Y/N, A/B/C/D (Can you also shorten the answer: put only T for True, F for False , Y for Yes, N for No coz it also save time for us to test the code lol I'm tired of typing true, false lol)
 #Task 2: How to call the different score in random weather and add on the co2consumed Score (fix the function 4: function called weather)
-#Task 3: fix the function 2 called call_airport since it prints 2 times instead of 1 time (Arijana you can tried to change your code like the way you usual call sql instead of my way. Maybe it helps)
+#Task 3: fix the function 2 called call_airport since it prints 2 times instead of 1 time (Arijana you can tried to change the code like the way you usual call sql instead of my way. Maybe it helps)
 #Task 4: make a while loop statement in every input part so if player dont answer yes/no or don't input the result as we expect, the question is asked again until they answer as we want to proceed to next step
 
 
