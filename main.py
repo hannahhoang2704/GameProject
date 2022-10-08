@@ -105,19 +105,23 @@ def airport_position(ICAO):
     return deg
 
 
-#Function 4: to call score affected by weather                                                     #NEED TO CHECKED!!!!!!
-
-def weather(score):
-    score = random.randint(4, 8)
-    sql = "SELECT score, description from goal WHERE id= score"
+#Function 4: to call score affected by weather
+def weather(correct_answer):
+    if correct_answer == True:
+        ran_nr = random.randint(1, 4)
+    else:
+        ran_nr = random.randint(5,8)
+    #print(ran_nr)
     cursor = connection.cursor()
-    cursor.execute(sql)
+    sql = "SELECT score, description from goal WHERE id= %s"
+    ran = (ran_nr, ) # execute needs tuple to function properly
+    cursor.execute(sql, ran)
     result = cursor.fetchall()
-    if cursor.rowcount > 0:
-        for row in result:
-            print(f"You caught this type of weather: {row[1]}. That's why your C02 will added: {row[0]}")
-            #co2_score = row[0]
-    return #co2_score
+    for i in result:
+        print(f"You caught: {i[1]}. That's why your C02 will change by {i[0]} units.")
+        co2_score = int(i[0])
+    return co2_score
+
 
 #Main program
 #Phase1: Intro of the game & set a goal for players
@@ -176,6 +180,8 @@ dist = distance.distance(a, b).km
 print(f"Distance between {call_airport(icao_selection)} and Rovaniemi Airport is {dist:.2f} km")
 
 """
+
+
 #Start the game
 
 co2_budget = 10000
@@ -200,24 +206,24 @@ while co2_consumed < co2_budget and destinations > 0:
         questions.pop(random_index_number)
         answers.pop(random_index_number)
         if user_answer == right_answer:
-            print("correct.")
-            co2_consumed += 500 #this is a work in progress. add weather
-            print(co2_consumed)
+            print("Correct.")
+            co2_consumed += weather(True) #this is a work in progress. add weather
+            print(f"Your current Co2 level is: {co2_consumed}\n")
         # weather(random_weather1)
         else:
             print("Wrong")
-            co2_consumed += 2500
-            print(co2_consumed)
+            co2_consumed += weather(False)
+            print(f"Your current Co2 level is: {co2_consumed}\n")
         destinations -= 1
 else:
     if co2_consumed >= co2_budget:
         print(f"Game over. You consumed {co2_consumed} Co2!")
     else:
-        print(f"{co2_consumed} & you passed 5 destinations. WIN!")
+        print(f"You consumed {co2_consumed} Co2 & you passed 5 destinations. WIN!")
 
-print(questions)
-print(used_index)
-print(answers)
+#print(questions)
+#print(used_index)
+#print(answers)
 
 
 #PROBLEM 1: Can't define who win the game, who lost the game --> DONE (Run more test to check further)
