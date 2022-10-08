@@ -10,7 +10,7 @@ connection = mysql.connector.connect(
          port=3306,
          database='game_project',
          user='root',
-         password='MyN3wP4ssw0rd',
+         password='!QAZ2wsx#EDC',
          autocommit=True
          )
 
@@ -182,17 +182,26 @@ co2_budget = 10000
 co2_consumed = 5000
 destinations = 5
 
-used_index = []      #Store the used questions' indexes to avoid duplicate questions
+questions = list(questions)
+answers = list(answers)
 
+used_index = []      #Store the used questions' indexes to avoid duplicate questions
+# we don't need used_indexes list. I'll remove it at some point. Now it is here because I put 2 print
+# statements in the end of our while loop where you can keep track of
+# the questions that have been asked and make sure they don't get repeated. Just to see that the while roop does what is it is
+#suppose to do. Now I'll work on connecting the weather as we have agreed.
 while co2_consumed < co2_budget and destinations > 0:
         #ask question & get point by answer
-        random_index_number = random.randint(0, len(questions) - 1)
+        random_index_number = random.randint(0, len(questions)-0)
         print(questions[random_index_number])
         user_answer = str(input("Give answer: "))
         right_answer = answers[random_index_number]
+        used_index.append(questions[random_index_number])
+        questions.pop(random_index_number)
+        answers.pop(random_index_number)
         if user_answer == right_answer:
             print("correct.")
-            co2_consumed -= 2000
+            co2_consumed += 500 #this is a work in progress. add weather
             print(co2_consumed)
         # weather(random_weather1)
         else:
@@ -201,10 +210,14 @@ while co2_consumed < co2_budget and destinations > 0:
             print(co2_consumed)
         destinations -= 1
 else:
-    if co2_consumed > co2_budget:
-        print("co2_consumed > co2_budget")
+    if co2_consumed >= co2_budget:
+        print(f"Game over. You consumed {co2_consumed} Co2!")
     else:
         print(f"{co2_consumed} & you passed 5 destinations. WIN!")
+
+print(questions)
+print(used_index)
+print(answers)
 
 
 #PROBLEM 1: Can't define who win the game, who lost the game --> DONE (Run more test to check further)
