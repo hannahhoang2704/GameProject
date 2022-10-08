@@ -55,7 +55,7 @@ answers = ("true",#0
 #Functions for text effect
 def text_effect(text):
     for char in text:
-        sleep(0.05)
+        sleep(0.00)
         sys.stdout.write(char)
 
 
@@ -76,7 +76,7 @@ def municipality_search(city):
 
 #Function 2: to call the airport in the chosen city
 
-def call_airport(icao):                                                                                 #NEED TO CHECKED!!!!!!
+def call_airport(icao):
     sql = "SELECT name FROM airport"
     sql += " WHERE ident='" + icao + "'"
     #print(sql)
@@ -126,21 +126,24 @@ def weather(correct_answer):
 #Main program
 #Phase1: Intro of the game & set a goal for players
 
-"""intro1 = "Each year there are children from all over the world\nwho don't believe in Santa Claus.\nOnce a year they decide to fly to Rovaniemi\n (where Santa apparently lives) with only one goal in their mind - to pull Santa's beard."
+intro1 = "Each year there are children from all over the world\nwho don't believe in Santa Claus.\nOnce a year they decide to fly to Rovaniemi\n (where Santa apparently lives) with only one goal in their mind - to pull Santa's beard."
 text_effect(intro1)
 
 intro2 = "On your way to Rovaniemi you will come across different challenges.\nOne of them being the Co2 consumption.\nThe budget you're given is 10 000.\nTry to keep it as low as possible. "
 text_effect(intro2)
 intro3 = "Do you believe in Santa Clause? "
-start = input(intro3)
-start = start.lower()
+while True:
+    start = input(intro3)
+    start = start.lower()
+    if start == "no":
+        print("Join us on a quest.")
+        break
+    elif start == "yes":
+        print("It's going to be an eye-opening experience for you. Let's go!")
+        break
+    else:
+        print("Just type yes or no.")
 
-if start == "no":
-    print("Join us on a quest.")
-elif start == "yes":
-    print("It's going to be an eye-opening experience for you. Let's go!")
-else:
-    print("Just type yes or no.")
 
 print("Lucky for you, there are other like-minded people out there.")
 
@@ -169,7 +172,7 @@ municipality_search(municipality)
 
 #Users choose the airport in the chosen city
 icao_selection = str(input("Here are the closest airports. Pick one by entering ICAO code: "))
-call_airport(icao_selection)
+airport_name = call_airport(icao_selection) #store airport name in a variable
 
 
 #Measure the distance between the chosen airport to Rovaniemi airport
@@ -177,9 +180,9 @@ call_airport(icao_selection)
 a = airport_position(icao_selection)
 b = airport_position("EFRO")
 dist = distance.distance(a, b).km
-print(f"Distance between {call_airport(icao_selection)} and Rovaniemi Airport is {dist:.2f} km")
+print(f"Distance between {airport_name} and Rovaniemi Airport is {dist:.2f} km")
 
-"""
+
 
 
 #Start the game
@@ -203,7 +206,7 @@ while co2_consumed < co2_budget and destinations > 0:
         while user_answer != "true" and user_answer != "false":
             print(questions[random_index_number])
             user_answer = input("True or false: ")
-            user_answer.lower()
+            user_answer = user_answer.lower()
 
 
         right_answer = answers[random_index_number]
@@ -243,55 +246,11 @@ else:
 #TASK NEED TO BE DONE: 
 #Task 1: Update question list: more questions, give users idea to put T/F, Y/N, A/B/C/D (Can you also shorten the answer: put only T for True, F for False , Y for Yes, N for No coz it also save time for us to test the code lol I'm tired of typing true, false lol)
 #Task 2: How to call the different score in random weather and add on the co2consumed Score (fix the function 4: function called weather) -- > DONE
-#Task 3: fix the function 2 called call_airport since it prints 2 times instead of 1 time (Arijana you can tried to change the code like the way you usual call sql instead of my way. Maybe it helps)
+#Task 3: fix the function 2 called call_airport since it prints 2 times instead of 1 time (Arijana you can tried to change the code like the way you usual call sql instead of my way. Maybe it helps) --> DONE
 #Task 4: make a while loop statement in every input part so if player dont answer yes/no or don't input the result as we expect, the question is asked again until they answer as we want to proceed to next step --> DONE
 
 
 
-
-
-
-
-#DRAFT TO REUSE WHEN NEEDED, not a code to run in program
-"""while co2_consumed < co2_budget:
-    for x in range(destinations):
-        random_index_number = random.randint(0, len(questions) - 1)
-        print(questions[random_index_number])
-        user_answer = str(input("Give answer: "))
-        right_answer = answers[random_index_number]
-        if user_answer == right_answer:
-            print("Good job! Your answer is correct.")
-            co2_consumed -= 2000
-            print(co2_consumed)
-            #weather(random_weather1)
-        else:
-            print("Oops! The answer is wrong. You've consumed 1000 C02 more. Let's check the weather you got!")
-            co2_consumed += 2000
-            print(co2_consumed)
-else:
-    print("Game over!")"""
-
-#call Random question
-"""
-random_index_number = random.randint(0, len(questions)-1)
-
-if random_index_number not in used_index:                               #TO AVOID DUPLICATE QUESTIONS
-    print(questions[]) #Random questions
-    used_index.append(random_index_number) #Insert the used question's index in the list
-    print(used_index)
-
-user_answer = str(input("Give answer: "))
-right_answer = answers[random_index_number]
-if user_answer == right_answer:
-    print("Good job! Your answer is correct. ")
-
-    weather(random_weather1)
-else:
-    print("Oops! The answer is wrong. You've consumed 1000 C02 more. Let's check the weather you got!")
-    random_weather2 = random.randint(1,4)
-    weather(random_weather2)
-    co2_consumed = co2_consumed + 1000
-"""
 
 
 
