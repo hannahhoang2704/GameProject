@@ -214,7 +214,7 @@ clearScreen()
 
 player_name = input("Lets start with your name: ")
 
-municipality = input("Where do you live: ")
+municipality = input("From which city you want to start your journey: ")
 print("\nHere are your adventure starting point options: ")
 
 while check_city(municipality) == 0:
@@ -230,6 +230,7 @@ while icao_selection not in municipality_search(municipality):
     print("Oops! Check again the ICAO code. You can't arrive to the wanted airport if you don't call ICAO code correctly")
     icao_selection = str(input("Enter ICAO code again: "))
 else:
+    location = icao_selection                         # store value of icao
     airport_name = call_airport(icao_selection)  # store airport name in a variable
 
 # The distance between the chosen airport to Rovaniemi airport
