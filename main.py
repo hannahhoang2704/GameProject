@@ -295,3 +295,16 @@ else:
     else:
         text_effect(
             f"Congratulations, your flight is about to land with {co2_consumed} Co2 units consumed. You passed all the challenges and now Santa awaits.")
+
+#Record the player score in the database
+
+def record_score(co2_consumed, co2_budget, location, screen_name):
+    sql = "insert into game(co2_consumed, co2_budget, location, screen_name) values(" \
+          + str(co2_consumed) + "," + str(co2_budget) + ", '" + str(location) + "', '" + str(screen_name) + "')"
+    #print(sql)
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    #if cursor.rowcount == 1:
+        #print("Data is inserted")
+
+record_score(co2_consumed, co2_budget, location, player_name)
