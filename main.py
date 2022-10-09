@@ -1,9 +1,12 @@
 #Project Flight game
 import sys
 from time import sleep
+
 import mysql.connector
 import random
+
 from geopy import distance
+import time,os,sys
 
 connection = mysql.connector.connect(
          host='127.0.0.1',
@@ -13,6 +16,8 @@ connection = mysql.connector.connect(
          password='!QAZ2wsx#EDC',
          autocommit=True
          )
+
+
 
 #Questionaires and answers
 questions = ("Wasting less food is a way to reduce greenhouse gas emissions.", # 0
@@ -51,12 +56,27 @@ answers = ("true",#0
            "false") #15
 
 ##ALL FUNCTIONS
+#Function for underlying the text
+class Format:
+    end = '\033[0m'
+    underline = '\033[4m'
 
 #Functions for text effect
+
 def text_effect(text):
     for char in text:
-        sleep(0.00)
+        sleep(0.05)
         sys.stdout.write(char)
+
+
+def typingPrint(text):
+  for character in text:
+    sys.stdout.write(character)
+    sys.stdout.flush()
+    time.sleep(0.03)
+
+def clearScreen():
+  os.system("clear")
 
 
 #Function 1: to search the city
@@ -64,13 +84,14 @@ def text_effect(text):
 def municipality_search(city):
     sql = "SELECT ident, name FROM airport"
     sql += " WHERE municipality='" + city + "'"
-    #print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
+
+
     if cursor.rowcount > 0:
         for row in result:
-            print(f"ICAO code: {row[0]}, Airport name: {row[1]}")
+            print(f"       ICAO code: {row[0]}, Airport name: {row[1]}")
     return
 
 
@@ -85,7 +106,7 @@ def call_airport(icao):
     result = cursor.fetchall()
     if cursor.rowcount > 0:
         for row in result:
-            print(f"You are now in {row[0]} and ready for your flight!")
+            typingPrint(f"{player_name}, you are now in {row[0]}.Get ready for your flight!\n")
     return row[0]
 
 #Function 3: to measure the distance between the chosen airport to Rovaniemi airport
@@ -118,60 +139,76 @@ def weather(correct_answer):
     cursor.execute(sql, ran)
     result = cursor.fetchall()
     for i in result:
-        print(f"You caught: {i[1]}. That's why your C02 will change by {i[0]} units.")
+        print(f"{Format.underline + 'Weather forcast:' + Format.end} {i[1]}.\n")
+        text_effect(f"That's why your Co2 will change by {i[0]} units.\n")
         co2_score = int(i[0])
     return co2_score
+
 
 
 #Main program
 #Phase1: Intro of the game & set a goal for players
 
-intro1 = "Each year there are children from all over the world\nwho don't believe in Santa Claus.\nOnce a year they decide to fly to Rovaniemi\n (where Santa apparently lives) with only one goal in their mind - to pull Santa's beard."
+intro1 = f"Each year children from all over the world\nfly to {Format.underline + 'Rovaniemi' + Format.end} to meet Santa.\nBelievers to hug him and non-believers to expose him by pulling his beard. \n"
 text_effect(intro1)
 
-intro2 = "On your way to Rovaniemi you will come across different challenges.\nOne of them being the Co2 consumption.\nThe budget you're given is 10 000.\nTry to keep it as low as possible. "
+intro2 = f"\nOn your way to Rovaniemi you will come across different challenges.\nOne of them is flight's high {Format.underline + 'Co2 consumption.' + Format.end}\n{Format.underline + 'Your main challenge is to keep Co2 consumption as low as possible.' + Format.end}\nMake sure it doesn't go over 10 000, otherwise it is GAME OVER.\n"
 text_effect(intro2)
-intro3 = "Do you believe in Santa Clause? "
+typingPrint("Your mission starts in 3..")
+time.sleep(1)
+typingPrint("2..")
+time.sleep(1)
+typingPrint("1..")
+time.sleep(1)
+clearScreen()
+clearScreen()
+intro3 = "First things first, do you believe in Santa Clause? "
 while True:
     start = input(intro3)
     start = start.lower()
     if start == "no":
-        print("Join us on a quest.")
+        text_effect("\nMe neither. Get ready for an adventure.")
         break
     elif start == "yes":
-        print("It's going to be an eye-opening experience for you. Let's go!")
+        text_effect("\n***It's going to be an eye-opening experience for you. Let's go!***\n")
         break
     else:
         print("Just type yes or no.")
 
 
-print("Lucky for you, there are other like-minded people out there.")
+text_effect("Lucky for you, there are other like-minded people out there. \n")
 
-friends = input("Wanna meet them? ")
+friends = input("Do you want to meet them? ")
 friends = friends.lower()
 
 while friends != "yes" or friends != "no":
     if friends == "yes":
-        print("I thought so. Your new friends care about our planet Earth. "
-          "In order to have them join you on a quest\nthey will have questions ready for you.\n"
-          "Answer them correctly and you won't fly alone, plus you will have a good chance to stay within the Co2 budget.\n")
+        text_effect(f"\nI thought so.\nYour new friends care about our planet Earth.\nIn order to have them join you on your quest they will have {Format.underline + 'questions' + Format.end} for you.\n"
+          f"Answer them correctly and you won't fly alone, plus you will have a good chance to stay within the Co2 budget.\n")
         break
     elif friends == "no":
-        print("If you don't care about meeting new friends, I hope that you care about planet Earth.\n"
-          "On your trip you will come across different questions. Answer them correctly and you might save some Co2 and reach your destination within the budget.")
+        text_effect("\nIf you don't care about meeting new friends, I hope that you care about planet Earth.\n"
+          f"On your trip you will come across different {Format.underline + 'questions.' + Format.end}\nAnswer correctly and you might save some {Format.underline + 'Co2' + Format.end} and reach your destination within the budget.\n")
         break
     friends = input("Just type yes or no!")
     friends = friends.lower()
 
-#User input name and city
-player_name = input("Let us start with your name: ")
+typingPrint(f"{Format.underline + 'Your current Co2 consumption : 5000'+ Format.end}\n")
+time.sleep(3)
+clearScreen()
 
-municipality = str(input("Where do you live: "))
+
+#User input name and city
+player_name = input("Lets start with your name: ")
+
+municipality = input("Where do you live: ")
+print("\nHere are your adventure starting point options: ")
+
 
 municipality_search(municipality)
 
 #Users choose the airport in the chosen city
-icao_selection = str(input("Here are the closest airports. Pick one by entering ICAO code: "))
+icao_selection = str(input("Which one do you pick? Enter ICAO:  "))
 airport_name = call_airport(icao_selection) #store airport name in a variable
 
 
@@ -180,7 +217,15 @@ airport_name = call_airport(icao_selection) #store airport name in a variable
 a = airport_position(icao_selection)
 b = airport_position("EFRO")
 dist = distance.distance(a, b).km
-print(f"Distance between {airport_name} and Rovaniemi Airport is {dist:.2f} km")
+print(f"\n{Format.underline + f'Distance between {airport_name} and Rovaniemi Airport is {dist:.2f}km.' + Format.end}\n")
+typingPrint("Take-off in 3..")
+time.sleep(1)
+typingPrint("2..")
+time.sleep(1)
+typingPrint("1..")
+time.sleep(1)
+clearScreen()
+clearScreen()
 
 
 
@@ -189,65 +234,49 @@ print(f"Distance between {airport_name} and Rovaniemi Airport is {dist:.2f} km")
 
 co2_budget = 10000
 co2_consumed = 5000
-destinations = 5
+destinations = 1
 
 questions = list(questions)
 answers = list(answers)
 
-used_index = []      #Store the used questions' indexes to avoid duplicate questions
-# we don't need used_indexes list. I'll remove it at some point. Now it is here because I put 2 print
-# statements in the end of our while loop where you can keep track of
-# the questions that have been asked and make sure they don't get repeated. Just to see that the while roop does what is it is
-#suppose to do. Now I'll work on connecting the weather as we have agreed.
-while co2_consumed < co2_budget and destinations > 0:
-        #ask question & get point by answer
-        random_index_number = random.randint(0, len(questions))
+#used_index = []
+while co2_consumed < co2_budget and destinations <= 5:
+        time.sleep(3)
+        text_effect(f"\nYou are approaching stop number: {destinations}. Get your thinking hat on and answer the question:\n")
+        random_index_number = random.randint(0, len(questions)-1)
         user_answer = "0"
         while user_answer != "true" and user_answer != "false":
             print(questions[random_index_number])
             user_answer = input("True or false: ")
+            time.sleep(3)
             user_answer = user_answer.lower()
 
 
         right_answer = answers[random_index_number]
-        used_index.append(questions[random_index_number])
+        #used_index.append(questions[random_index_number])
         questions.pop(random_index_number)
         answers.pop(random_index_number)
         if user_answer == right_answer:
-            print("Correct.")
-            co2_consumed += weather(True) #this is a work in progress. add weather
-            print(f"Your current Co2 level is: {co2_consumed}\n")
-        # weather(random_weather1)
+            print(f"Good job! That was the {Format.underline + 'correct' + Format.end} answer.")
+            text_effect(f"{player_name} look ahead, it looks like the weather is in your favor.\n")
+            co2_consumed += weather(True)
+            text_effect(f"{Format.underline + 'Your current Co2 level is:' + Format.end} {co2_consumed} units\n")
+
+
+
         else:
-            print("Wrong")
+            print(f"You answered {Format.underline + 'incorrectly.' + Format.end}")
+            text_effect(f"{player_name} not only you didn't answer correctly but now it seems that the weather has changed.\n")
             co2_consumed += weather(False)
-            print(f"Your current Co2 level is: {co2_consumed}\n")
-        destinations -= 1
+            text_effect(f"{Format.underline + 'Your current Co2 level is:' + Format.end} {co2_consumed} units\n")
+
+
+        destinations += 1
 else:
     if co2_consumed >= co2_budget:
-        print(f"Game over. You consumed {co2_consumed} Co2!")
+        text_effect(f"Oh, no! Your Co2 consumption level was {co2_consumed} units. This exceeds your budget. Game over! Try again soon - Santa won't wait forever.")
     else:
-        print(f"You consumed {co2_consumed} Co2 & you passed 5 destinations. WIN!")
-
-#print(questions)
-#print(used_index)
-#print(answers)
-
-
-#PROBLEM 1: Can't define who win the game, who lost the game --> DONE (Run more test to check further)
-#PROBLEM 2: when player keep answer correctly c02 go to minus point. we don't want it go minus. it need to stay at least >0 so we have to do smt with it  --> DONE
-#PROBLEM 3: How to call random question and avoid duplicate question again --> DONE
-#PROBLEM 4: How to add call weather and add score from weather table to co2_consumed score --> DONE
-
-
-
-
-
-#TASK NEED TO BE DONE: 
-#Task 1: Update question list: more questions, give users idea to put T/F, Y/N, A/B/C/D (Can you also shorten the answer: put only T for True, F for False , Y for Yes, N for No coz it also save time for us to test the code lol I'm tired of typing true, false lol)
-#Task 2: How to call the different score in random weather and add on the co2consumed Score (fix the function 4: function called weather) -- > DONE
-#Task 3: fix the function 2 called call_airport since it prints 2 times instead of 1 time (Arijana you can tried to change the code like the way you usual call sql instead of my way. Maybe it helps) --> DONE
-#Task 4: make a while loop statement in every input part so if player dont answer yes/no or don't input the result as we expect, the question is asked again until they answer as we want to proceed to next step --> DONE
+        text_effect(f"Congratulations, your flight is about to land with {co2_consumed} Co2 units consumed. You passed all the challenges and now Santa awaits.")
 
 
 
