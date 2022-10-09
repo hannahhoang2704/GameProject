@@ -146,7 +146,7 @@ def weather(correct_answer):
     cursor.execute(sql, ran)
     result = cursor.fetchall()
     for i in result:
-        print(f"{Format.underline + 'Weather forcast:' + Format.end} {i[1]}.\n")
+        print(f"{Format.underline + 'Weather forecast:' + Format.end} {i[1]}.\n")
         text_effect(f"That's why your Co2 will change by {i[0]} units.\n")
         co2_score = int(i[0])
     return co2_score
@@ -224,10 +224,10 @@ else:
 
 # Users choose the airport in the chosen city
 
-icao_selection = input("Which one do you pick? Enter ICAO:  ")
+icao_selection = input("You can see all the airports in your city above.\nChoose an airport you want to travel from by enter ICAO:   ")
 
 while icao_selection not in municipality_search(municipality):
-    print("Oops! Check again the ICAO code. You can't arrive to the wanted airport if you don't call ICAO code correctly")
+    print("Oops! Check again the ICAO code. You can't arrive to the airport if you don't call ICAO code correctly!")
     icao_selection = str(input("Enter ICAO code again: "))
 else:
     location = icao_selection                         # store value of icao
@@ -247,11 +247,13 @@ typingPrint("1..")
 time.sleep(1)
 clearScreen()
 clearScreen()
+
+
 # PHASE 2: GAME START!
 
 co2_budget = 10000
 co2_consumed = 5000
-destinations = 1
+destinations = 1           
 
 questions = list(questions)
 answers = list(answers)
@@ -263,33 +265,35 @@ while co2_consumed < co2_budget and destinations <= 5:
     random_index_number = random.randint(0, len(questions) - 1)
     user_answer = "0"
     while user_answer != "true" and user_answer != "false":
-        print(questions[random_index_number])
+        print(questions[random_index_number])                  #call random question in questions list
         user_answer = input("True or false: ")
         time.sleep(2)
         user_answer = user_answer.lower()
 
     right_answer = answers[random_index_number]
-    questions.pop(random_index_number)
+    questions.pop(random_index_number)                         #pop the question from the list to avoid duplicated question in next destination
     answers.pop(random_index_number)
+
+#Check if players answer correct or not
 
     if user_answer == right_answer:
         print(f"Good job! That was the {Format.underline + 'correct' + Format.end} answer.")
-        text_effect(f"{player_name} look ahead, it looks like the weather is in your favor.\n")
+        text_effect(f"{player_name}, look ahead, it looks like the weather is in your favor.\n")
         co2_consumed += weather(True)
-        text_effect(f"{Format.underline + 'Your current Co2 level is:' + Format.end} {co2_consumed} units\n")
-        print(f"You are {calc_distance_to_Rov(destinations, dist)} km away from Rovaniemi.")
+       
     elif user_answer != right_answer:
         print(f"You answered {Format.underline + 'incorrectly.' + Format.end}")
         text_effect(
             f"{player_name} not only you didn't answer correctly but now it seems that the weather has changed.\n")
         co2_consumed += weather(False)
-        text_effect(f"{Format.underline + 'Your current Co2 level is:' + Format.end} {co2_consumed} units\n")
-        print(f"You are {calc_distance_to_Rov(destinations, dist)} km away from Rovaniemi.")
-    elif co2_consumed >= co2_budget:
-        text_effect(f"{Format.underline + 'Your current Co2 level is:' + Format.end} {co2_consumed} units\n")
+     
+    text_effect(f"{Format.underline + 'Your current Co2 level is:' + Format.end} {co2_consumed} units\n")            #inform players their co2 score
+    print(f"You are {calc_distance_to_Rov(destinations, dist)} km away from Rovaniemi.")                             # Inform players how far from that destination to Rovaniemi
+    
     destinations += 1
-     # Inform how far from that destination to Rovaniemi
+     
 else:
+    #Check if players win or lost the game
     if co2_consumed >= co2_budget:
         text_effect(
             f"Oh, no! Your Co2 consumption level was {co2_consumed} units. This exceeds your budget. Game over! Try again soon - Santa won't wait forever.")
@@ -297,7 +301,7 @@ else:
         text_effect(
             f"Congratulations, your flight is about to land with {co2_consumed} Co2 units consumed. You passed all the challenges and now Santa awaits.")
 
-#Record the player score in the database
+#Store the player score in the database
 
 def record_score(co2_consumed, co2_budget, location, screen_name):
     sql = "insert into game(co2_consumed, co2_budget, location, screen_name) values(" \
@@ -309,3 +313,5 @@ def record_score(co2_consumed, co2_budget, location, screen_name):
         #print("Data is inserted")
 
 record_score(co2_consumed, co2_budget, location, player_name)
+
+
