@@ -10,7 +10,7 @@ connection = mysql.connector.connect(
          port=3306,
          database='game_project',
          user='root',
-         password='!QAZ2wsx#EDC',
+         password='MyN3wP4ssw0rd',                              #CHECK PASSWORD TO RUN THE PROGRAM!!!
          autocommit=True
          )
 
@@ -58,28 +58,43 @@ def text_effect(text):
         sleep(0.00)
         sys.stdout.write(char)
 
+#Function: check if the city exists in database
 
-#Function 1: to search the city
-
-def municipality_search(city):
-    sql = "SELECT ident, name FROM airport"
-    sql += " WHERE municipality='" + city + "'"
+def check_city(city):
+    sql = "SELECT count(*) from airport"
+    sql += " WHERE municipality ='" + city + "'"
     #print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
     if cursor.rowcount > 0:
         for row in result:
+            row[0]
+            #print(f"Number of airports in {city} is: {row[0]}")
+    return row[0]
+
+#Function: to search airports in the city
+
+def municipality_search(city):
+    sql = "SELECT ident, name FROM airport"
+    sql += " WHERE municipality='" + city + "'"
+    icao_list = []
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    if cursor.rowcount > 0:
+        for row in result:
             print(f"ICAO code: {row[0]}, Airport name: {row[1]}")
-    return
+            print(type(row[0]))
+            icao_list.append(row[0])
+    return print(icao_list)
 
 
-#Function 2: to call the airport in the chosen city
+#Function: to call the airport in the chosen city
 
 def call_airport(icao):
     sql = "SELECT name FROM airport"
     sql += " WHERE ident='" + icao + "'"
-    #print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
@@ -88,29 +103,26 @@ def call_airport(icao):
             print(f"You are now in {row[0]} and ready for your flight!")
     return row[0]
 
-#Function 3: to measure the distance between the chosen airport to Rovaniemi airport
+#Function: to measure the distance between the chosen airport to Rovaniemi airport
 
 def airport_position(ICAO):
     sql = "SELECT name, latitude_deg, longitude_deg from airport"
     sql += " WHERE ident='" + ICAO + "'"
-    #print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
     if cursor.rowcount > 0:
         for row in result:
-            #print(f"Airport name: {row[0]}")
             deg = (row[1], row[2])
-            #print(deg)
     return deg
 
 
-#Function 4: to call score affected by weather
+#Function: to call score affected by weather
 def weather(correct_answer):
     if correct_answer == True:
         ran_nr = random.randint(1, 4)
     else:
-        ran_nr = random.randint(5,8)
+        ran_nr = random.randint(5, 8)
     #print(ran_nr)
     cursor = connection.cursor()
     sql = "SELECT score, description from goal WHERE id= %s"
@@ -123,9 +135,17 @@ def weather(correct_answer):
     return co2_score
 
 
-#Main program
-#Phase1: Intro of the game & set a goal for players
+#Function: check how far the play is to Rovaniemi
 
+def calc_distance_to_Rov(position, distance):
+    dis_to_Rov = round(distance - (distance/5 * position),2)
+    return dis_to_Rov
+
+
+#START THE GAME/MAIN PROGRAM
+
+#PHASE1: Intro of the game & set a goal for players
+"""
 intro1 = "Each year there are children from all over the world\nwho don't believe in Santa Claus.\nOnce a year they decide to fly to Rovaniemi\n (where Santa apparently lives) with only one goal in their mind - to pull Santa's beard."
 text_effect(intro1)
 
@@ -165,14 +185,24 @@ while friends != "yes" or friends != "no":
 
 #User input name and city
 player_name = input("Let us start with your name: ")
+"""
+municipality = input("Which city do you want to fly from: ")
 
-municipality = str(input("Where do you live: "))
+while check_city(municipality) == 0:
+    municipality = input("Oops! We can't find neither your city nor its airport. Another city please: ")
+else:
+    municipality_search(municipality)
 
-municipality_search(municipality)
 
 #Users choose the airport in the chosen city
-icao_selection = str(input("Here are the closest airports. Pick one by entering ICAO code: "))
-airport_name = call_airport(icao_selection) #store airport name in a variable
+
+icao_selection = input("Here are the closest airports. Pick one by entering ICAO code: ")
+####PROBLEM!!!!
+while icao_selection not in municipality_search(icao_selection):
+    print("Oops! Check again the ICAO code. You can't arrive the wanted airport if you don't call ICAO code correctly")
+    icao_selection = str(input("Enter ICAO code again: "))
+else:
+    airport_name = call_airport(icao_selection) #store airport name in a variable
 
 
 #Measure the distance between the chosen airport to Rovaniemi airport
@@ -183,55 +213,50 @@ dist = distance.distance(a, b).km
 print(f"Distance between {airport_name} and Rovaniemi Airport is {dist:.2f} km")
 
 
-
-
-#Start the game
+#PHASE 2: GAME START!
 
 co2_budget = 10000
 co2_consumed = 5000
-destinations = 5
+destinations = 1
 
 questions = list(questions)
 answers = list(answers)
 
-used_index = []      #Store the used questions' indexes to avoid duplicate questions
+#used_index = []      #Store the used questions' indexes to avoid duplicate questions
 # we don't need used_indexes list. I'll remove it at some point. Now it is here because I put 2 print
 # statements in the end of our while loop where you can keep track of
 # the questions that have been asked and make sure they don't get repeated. Just to see that the while roop does what is it is
 #suppose to do. Now I'll work on connecting the weather as we have agreed.
-while co2_consumed < co2_budget and destinations > 0:
+
+while co2_consumed < co2_budget and destinations <= 5:
+        print(f"You're in destination {destinations} and your Co2 consumption score is {co2_consumed}")
         #ask question & get point by answer
-        random_index_number = random.randint(0, len(questions))
+        random_index_number = random.randint(0, len(questions)-1)
         user_answer = "0"
         while user_answer != "true" and user_answer != "false":
             print(questions[random_index_number])
             user_answer = input("True or false: ")
             user_answer = user_answer.lower()
 
-
         right_answer = answers[random_index_number]
-        used_index.append(questions[random_index_number])
+        #used_index.append(questions[random_index_number])
         questions.pop(random_index_number)
         answers.pop(random_index_number)
         if user_answer == right_answer:
             print("Correct.")
-            co2_consumed += weather(True) #this is a work in progress. add weather
-            print(f"Your current Co2 level is: {co2_consumed}\n")
-        # weather(random_weather1)
+            co2_consumed += weather(True)
         else:
             print("Wrong")
             co2_consumed += weather(False)
-            print(f"Your current Co2 level is: {co2_consumed}\n")
-        destinations -= 1
+        print(f"Your current Co2 level is: {co2_consumed}\n")
+        destinations += 1
+        print(f"You are {calc_distance_to_Rov(destinations, dist)} km away from Rovaniemi. Yay!!!") #Inform how far from that destination to Rovaniemi
 else:
     if co2_consumed >= co2_budget:
         print(f"Game over. You consumed {co2_consumed} Co2!")
     else:
         print(f"You consumed {co2_consumed} Co2 & you passed 5 destinations. WIN!")
 
-#print(questions)
-#print(used_index)
-#print(answers)
 
 
 #PROBLEM 1: Can't define who win the game, who lost the game --> DONE (Run more test to check further)
@@ -243,12 +268,11 @@ else:
 
 
 
-#TASK NEED TO BE DONE: 
+#TASK NEED TO BE DONE:
 #Task 1: Update question list: more questions, give users idea to put T/F, Y/N, A/B/C/D (Can you also shorten the answer: put only T for True, F for False , Y for Yes, N for No coz it also save time for us to test the code lol I'm tired of typing true, false lol)
 #Task 2: How to call the different score in random weather and add on the co2consumed Score (fix the function 4: function called weather) -- > DONE
 #Task 3: fix the function 2 called call_airport since it prints 2 times instead of 1 time (Arijana you can tried to change the code like the way you usual call sql instead of my way. Maybe it helps) --> DONE
 #Task 4: make a while loop statement in every input part so if player dont answer yes/no or don't input the result as we expect, the question is asked again until they answer as we want to proceed to next step --> DONE
-
 
 
 
