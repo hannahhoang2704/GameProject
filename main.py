@@ -74,7 +74,7 @@ def check_city(city):
     return row[0]
 
 #Function: to search airports in the city
-
+####PROBLEM!!!!!
 def municipality_search(city):
     sql = "SELECT ident, name FROM airport"
     sql += " WHERE municipality='" + city + "'"
@@ -197,7 +197,7 @@ else:
 #Users choose the airport in the chosen city
 
 icao_selection = input("Here are the closest airports. Pick one by entering ICAO code: ")
-####PROBLEM!!!!
+                                                                                                                              ####PROBLEM!!!!
 while icao_selection not in municipality_search(icao_selection):
     print("Oops! Check again the ICAO code. You can't arrive the wanted airport if you don't call ICAO code correctly")
     icao_selection = str(input("Enter ICAO code again: "))
