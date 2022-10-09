@@ -1,0 +1,145 @@
+create database game_project;
+use game_project;
+create table airport(
+	ident varchar(40) DEFAULT NULL,
+	id int(11) NOT NULL,
+	type varchar(40) DEFAULT NULL,
+	name varchar(40) DEFAULT NULL,
+	latitude_deg double DEFAULT NULL,
+	longitude_deg double DEFAULT NULL,
+	elevation_ft int(11) DEFAULT NULL,
+	continent varchar(40) DEFAULT NULL,
+	iso_country varchar(40) DEFAULT NULL,
+	iso_region varchar(40) DEFAULT NULL,
+	municipality varchar(40) DEFAULT NULL,
+	scheduled_service varchar(40) DEFAULT NULL,
+	gps_code varchar(40) DEFAULT NULL,
+	iata_code varchar(40) DEFAULT NULL,
+	local_code varchar(40) DEFAULT NULL,
+	home_link varchar(40) DEFAULT NULL,
+	wikipedia_link varchar(40) DEFAULT NULL,
+	keywords varchar(40) DEFAULT NULL,
+	PRIMARY KEY (ident)
+	);
+	
+	
+create table country(
+	id int (11) DEFAULT NULL,
+	code varchar(2) DEFAULT NULL,
+	name varchar(40) DEFAULT NULL,
+	continent varchar(40) DEFAULT NULL,
+	wikipedia_link varchar(40) DEFAULT NULL,
+	keywords varchar(40) DEFAULT NULL
+	);
+
+create table game(
+	id varchar(40) NOT NULL,
+	co2_consumed int(8) DEFAULT NULL,
+	co2_budget int(8) DEFAULT NULL,
+	location varchar(10) DEFAULT NULL,
+	screen_name varchar(40) DEFAULT NULL,
+	PRIMARY KEY (id)
+	);
+	
+create table goal(
+	id int(11) DEFAULT NULL,
+	name varchar(40) DEFAULT NULL,
+	description varchar(200) DEFAULT NULL,
+	icon varchar(8) DEFAULT NULL,
+	target varchar(40) DEFAULT NULL,
+	target_minvalue decimal(8,2) DEFAULT NULL,
+	target_maxvalue decimal(8,2) DEFAULT NULL,
+	target_text varchar(40) DEFAULT NULL,
+	score varchar(40) DEFAULT NULL,
+	PRIMARY KEY (id)
+	);
+	
+create table goal_reached(
+	game_id varchar(40) NOT NULL,
+	goal_id int(11) NOT NULL,
+	PRIMARY KEY (game_id, goal_id),
+	KEY `goalid` (`goal_id`),
+	CONSTRAINT `goal_reached_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`),
+	CONSTRAINT `goal_reached_ibfk_2` FOREIGN KEY (`goal_id`) REFERENCES `goal` (`id`)
+	);
+	
+	
+	####Import countries.csv through Heidi/Beaver
+	####Import airport.csv through Heidi/Beaver
+	
+alter table country
+	drop column id;
+	
+alter table country 
+	change code iso_country varchar(40);
+	
+SET FOREIGN_KEY_CHECKS = 0;
+	
+insert into game (id, co2_consumed, co2_budget, location, screen_name)
+	values (1, 2000, 10000, "EFHK", "Heini"), (2, 3000, 10000, "EGCC", "Vesa"), (3, 8000, 10000, "EGKK", "Ilkka");
+	
+insert into goal_reached(goal_id, game_id)
+	values (1,4), (1,7), (2,4), (3,7);
+
+alter table country
+	add primary key(iso_country);
+	
+alter table airport
+	add foreign key (iso_country)
+	references country(iso_country);
+	
+alter table game
+	add foreign key(location)
+	references airport(ident);
+	
+alter table airport 
+	drop  primary key;
+
+alter table airport 
+	add primary key (ident, iso_country);
+
+
+alter table game 
+	drop primary key;
+
+alter table game 
+	add primary key (id, location);
+
+insert into goal (id, name, description, icon, target, target_minvalue, target_maxvalue, target_text, score)
+	values (1, "HOT", "Temperature over +25c", "01d", "TEMP", 25, 9999, NULL, -1000), (2, "0DEG", "Temperatura exactly 0c", "04d", "TEMP", -0.5, 0.5, NULL, -200),
+	(3, "10DEG", "Temperatura exactly +10c", "04d", "TEMP", 9.5, 10.5, NULL, -400),(4, "20DEG", "Temperatura exactly +20c", "04d", "TEMP", 19.5, 20.5, NULL, -800),
+	(5, "CLEAR", "Clear skies", "01d", "WEATHER", NULL, NULL, "Clear", 0),(6, "COLD", "Temperature under -20c", "13d", "TEMP", -9999, -20, NULL, 2300), (7, "CLOUDS", "Cloudy", "04d", "WEATHER", NULL, NULL, "Clouds", 2000), (8, "WINDY", "Wind blows more than 10 m/s", "04d", "WIND", 10, 9999, NULL, 2500);
+
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+alter table goal
+drop column icon;
+alter table goal
+drop column target;
+alter table goal
+drop column target_minvalue;
+alter table goal
+drop column target_maxvalue;
+alter table goal
+drop column target_text;
+alter table airport
+drop column type;
+alter table airport
+drop column elevation_ft;
+alter table airport
+drop column iso_region;
+alter table airport
+drop column scheduled_service;
+alter table airport
+drop column gps_code;
+alter table airport
+drop column iata_code;
+alter table airport
+drop column local_code;
+alter table airport
+drop column home_link;
+alter table airport
+drop column wikipedia_link;
+alter table airport
+drop column keywords;
