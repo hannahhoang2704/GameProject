@@ -100,7 +100,7 @@ def municipality_search(city):
         for row in result:
             print(f"     ICAO code: {row[0]}, Airport name: {row[1]}")
             icao_list.append(row[0])
-            print(icao_list)
+            #print(icao_list)
     return icao_list
 
 
@@ -201,7 +201,7 @@ while friends != "yes" or friends != "no":
         break
     elif friends == "no":
         text_effect("\nIf you don't care about meeting new friends, I hope that you care about planet Earth.\n"
-          f"On your trip you will come across different {Format.underline + 'questions.' + Format.end}\nAnswer correctly and you might save some {Format.underline + 'Co2' + Format.end} and reach your destination within the budget.\n")
+          f"On your trip you will come across different {Format.underline + 'questions.' + Format.end}\nAnswer correctly and you might save some {Format.underline + 'Co2' + Format.end} and reach your destination within co2 budget.\n")
         break
     friends = input("Just type yes or no!")
     friends = friends.lower()
