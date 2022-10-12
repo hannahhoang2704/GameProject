@@ -332,7 +332,27 @@ def record_score(co2_consumed, co2_budget, location, screen_name):
     # print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
-    # if cursor.rowcount == 1:
+    # if cursor.rowcount == 1:              # Confirm the score and record it in system
     # print("Data is inserted")
 
 record_score(co2_consumed, co2_budget, location, player_name)
+
+#Check the best-recording score
+
+def record_check():
+    sql = "select screen_name, co2_consumed from game order by co2_consumed limit 5"
+    # print(sql)
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    for row in result:
+        print(f"Player's name: {row[0]}, Score: {row[1]}")
+    return
+
+ask_recording = input("\nDo you want to check top 5 best record (yes/no): ")
+ask_recording.lower()
+
+if ask_recording == "yes":
+    record_check()
+else:
+    print("See you again!")
