@@ -277,11 +277,14 @@ player_name = player_name.capitalize()
 
 
 municipality = input(bcolors.GREEN + 'From which city you want to start your journey:' + bcolors.RESET)
-print("\nHere are your adventure starting point options: ")
 
-while check_city(municipality) == 0:
-    municipality = input(f"Oops! We can't find neither your city nor its airport. {(bcolors.GREEN + 'Another city please: ' + bcolors.RESET)}")
+while municipality.lower() == "rovaniemi":                      #Player can't choose Rovaniemi as a starting point
+    municipality = input("Oops! You can't fly from this city. Another city please: ")
+    while check_city(municipality) == 0:
+        municipality = input("Oops! You can't fly from this city. Another city please: ")
+
 else:
+    print("\nHere are your adventure starting point options: ")
     municipality_search(municipality)
 
 # Users choose the airport in the chosen city
