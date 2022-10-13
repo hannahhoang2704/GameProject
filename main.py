@@ -64,8 +64,8 @@ def game_replay():
         RED = '\033[91m'
         BLUE = '\033[94m'
 
-    T = "Game over"
-    W = "HO HO HO"
+    
+    W = "                   HO      HO      HO"
     ASCII_art_1 = pyfiglet.figlet_format(W)
     print(bcolors.BLUE + ASCII_art_1 + bcolors.RESET)
 
