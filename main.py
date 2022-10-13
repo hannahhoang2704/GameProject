@@ -3,13 +3,16 @@ import mysql.connector
 import random
 from geopy import distance
 import time, os, sys
+import pyfiglet
+
+
 
 connection = mysql.connector.connect(
     host='127.0.0.1',
     port=3306,
     database='game_project',
     user='root',
-    password='MyN3wP4ssw0rd',  # CHECK PASSWORD TO RUN THE PROGRAM!!!
+    password='!QAZ2wsx#EDC',  # MyN3wP4ssw0rd ##CHECK PASSWORD TO RUN THE PROGRAM!!!
     autocommit=True
 )
 
@@ -53,7 +56,18 @@ answers = ("true",  # 0
            "true",  # 13
            "true",  # 14
            "false")  # 15
+#imports colors
+class bcolors:
+    GREEN = '\033[92m'
+    RESET = '\033[0m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    BLUE = '\033[94m'
 
+T = "Game over"
+W = "HO HO HO"
+ASCII_art_1 = pyfiglet.figlet_format(W)
+print(bcolors.BLUE + ASCII_art_1 + bcolors.RESET)
 
 ##ALL FUNCTIONS
 # Function for underlying the text
@@ -173,25 +187,55 @@ def calc_distance_to_Rov(position, distance):
 
 # PHASE1: Intro of the game & set a goal for players
 
-intro1 = f"Each year children from all over the world\nfly to {Format.underline + 'Rovaniemi' + Format.end} to meet Santa.\nBelievers to hug him and non-believers to expose him by pulling his beard. \n"
+intro1 = f"Each year children from all over the world\nfly to {Format.underline + 'Rovaniemi' + Format.end} to meet {bcolors.BLUE + 'Santa' + bcolors.RESET}.\nBelievers to hug him and non-believers to expose him by pulling his beard. \n"
 text_effect(intro1)
 
 intro2 = f"\nOn your way to Rovaniemi you will come across different challenges.\nOne of them is flight's {Format.underline + 'Co2 consumption.' + Format.end}\nYour main goal is to {Format.underline + 'keep Co2 consumption as low as possible.' + Format.end}\nMake sure it doesn't go over 10 000 units!\n"
 text_effect(intro2)
-typingPrint("Your mission starts in 3..")
+
+typingPrint("Your mission starts in 3..\n")
+print(bcolors.YELLOW +"""                             ______
+                            _\ _~-\___
+                   =  = ==(____AA____D
+                               \_____\___________________,-~~~~~~~`-.._
+                               /     o O o o o o O O o o o o o o O o  |\_
+                               `~-.__        ___..----..                  )
+                                     `---~~\___________/------------`````
+                                     =  ===(_________D
+""" + bcolors.RESET)
 time.sleep(1)
-typingPrint("2..")
+typingPrint("2..\n")
+print(bcolors.YELLOW +"""                                                                  ______
+                                                                  _\ _~-\___
+                                                          =  = ==(____AA____D
+                                                                      \_____\___________________,-~~~~~~~`-.._
+                                                                      /     o O o o o o O O o o o o o o O o  |\_
+                                                                     `~-.__        ___..----..                  )
+                                                                           `---~~\___________/------------`````
+                                                                             =  ===(_________D
+""" + bcolors.RESET)
+
 time.sleep(1)
-typingPrint("1..")
+typingPrint("1..\n")
+print(bcolors.YELLOW +"""                                                                                                           ______
+                                                                                                          _\ _~-\___
+                                                                                                  =  = ==(____AA____D
+                                                                                                                \_____\___________________,-~~~~~~~`-.._
+                                                                                                              /     o O o o o o O O o o o o o o O o  |\_
+                                                                                                               `~-.__        ___..----..                  )
+                                                                                                                  `---~~\___________/------------`````
+                                                                                                                   =  ===(_________D
+""" + bcolors.RESET)
 time.sleep(1)
 clearScreen()
 clearScreen()
-intro3 = "Firstly, do you believe in Santa Claus? "
+intro3 = (bcolors.GREEN + 'Firstly, do you believe in Santa Claus? '  + bcolors.RESET)
+
 while True:
     start = input(intro3)
     start = start.lower()
     if start == "no":
-        text_effect("\nMe neither. Get ready for an adventure.")
+        text_effect("\nMe neither. Get ready for an adventure.\n")
         break
     elif start == "yes":
         text_effect(
@@ -200,9 +244,12 @@ while True:
     else:
         print("Just type yes or no. ")
 
-text_effect(" Lucky for you, there are other like-minded people out there. \n")
 
-friends = input("Do you want to meet them? ")
+
+
+text_effect("Lucky for you, there are other like-minded people out there. \n")
+
+friends = input(bcolors.GREEN + "Do you want to meet them? " + bcolors.RESET)
 friends = friends.lower()
 
 while friends != "yes" or friends != "no":
@@ -225,24 +272,25 @@ clearScreen()
 
 # User input name and city
 
-player_name = input("Lets start with your name: ").capitalize()
+player_name = input(bcolors.GREEN + 'Lets start with your name: ' + bcolors.RESET)
+player_name = player_name.capitalize()
 
 
-municipality = input("From which city you want to start your journey: ")
+municipality = input(bcolors.GREEN + 'From which city you want to start your journey:' + bcolors.RESET)
 print("\nHere are your adventure starting point options: ")
 
 while check_city(municipality) == 0:
-    municipality = input("Oops! We can't find neither your city nor its airport. Another city please: ")
+    municipality = input(f"Oops! We can't find neither your city nor its airport. {(bcolors.GREEN + 'Another city please: ' + bcolors.RESET)}")
 else:
     municipality_search(municipality)
 
 # Users choose the airport in the chosen city
 
-icao_selection = input("You can see all the airports in your city above.\nEnter ICAO to choose the airport you want to fly:   ")
+icao_selection = input(f"You can see all the airports in your city above.\n{(bcolors.GREEN + 'Enter ICAO to choose the airport you want to fly: ' + bcolors.RESET)}  ")
 
 while icao_selection.upper() not in icao_list:
     print("Oops! Check again the ICAO code. You can't arrive to the airport if you don't call ICAO code correctly!")
-    icao_selection = str(input("Enter ICAO code again: "))
+    icao_selection = str(input(bcolors.GREEN + 'Enter ICAO code again:'  + bcolors.RESET))
 else:
     location = icao_selection.upper() # store value of icao
     airport_name = call_airport(icao_selection)  # store airport name in a variable
@@ -254,14 +302,58 @@ b = airport_position("EFRO")
 dist = distance.distance(a, b).km
 print(
     f"\n{Format.underline + f'Distance between {airport_name} and Rovaniemi Airport is {dist:.2f}km.' + Format.end}\n")
-typingPrint("Take-off in 3..")
-time.sleep(1)
-typingPrint("2..")
-time.sleep(1)
-typingPrint("1..")
-time.sleep(1)
+
+time.sleep(3)
 clearScreen()
 clearScreen()
+#typingPrint("Take-off in 3..\n")
+
+print("""Take-off in 3..\n
+      \         /   \         /   \         /   \         /
+      _\/     \/_   _\/     \/_   _\/     \/_   _\/     \/_
+       _\-'"'-/_     _\-'"'-/_     _\-'"'-/_     _\-'"'-/_
+      (_,     ,_)   (_,     ,_)   (_,     ,_)   (_,     ,_)
+        | ^ ^ |       | o o |       | a a |       | 6 6 |
+        |     |       |     |       |     |       |     |
+        |     |       |     |       |     |       |     |
+        |  Y  |       |  @  |       |  O  |       |  V  |
+        `._|_.'       `._|_.'       `._|_.'       `._|_.'""")
+
+time.sleep(2)
+clearScreen()
+clearScreen()
+#typingPrint("")
+print("""2..\n
+                     \         /   \         /  
+                     _\/     \/_   _\/     \/_   
+                      _\-'"'-/_     _\-'"'-/_     
+                     (_,     ,_)   (_,     ,_)     
+                       | q p |       | @ @ |           
+                       |     |       |     |          
+                       |     |       |     |          
+                       | \_/ |       |  V  |     
+                       `._|_.'       `._|_.'            """)
+
+time.sleep(2)
+clearScreen()
+clearScreen()
+#yestypingPrint("")
+print("""1..\n
+                           \         /
+                           _\/     \/_
+                            _\-'"'-/_
+                           (_,     ,_)
+                             | e e |
+                             |     |
+                        '-.  |  _  |  .-'
+                       --=   |((@))|   =--
+                        .-'  `._|_.'  '-.
+
+""")
+time.sleep(2)
+clearScreen()
+clearScreen()
+
 
 # PHASE 2: GAME START!
 
@@ -273,16 +365,16 @@ questions = list(questions)
 answers = list(answers)
 
 while co2_consumed < co2_budget and destinations <= 5:
-    time.sleep(2)
+    time.sleep(0.5)
     text_effect(
-        f"\nYou are approaching destination {destinations}. Answer the question:\n")
+        f"You are approaching destination {destinations}. {(bcolors.GREEN + 'Answer the question: ' + bcolors.RESET)}\n")
     # ask question & get point by answer
     random_index_number = random.randint(0, len(questions) - 1)
     user_answer = "0"
     while user_answer != "true" and user_answer != "false":
         print(questions[
                   random_index_number])  # call random question in questions list
-        user_answer = input("True or false: ")
+        user_answer = input(bcolors.GREEN + 'True or false: ' + bcolors.RESET)
         time.sleep(2)
         user_answer = user_answer.lower()
 
@@ -295,13 +387,13 @@ while co2_consumed < co2_budget and destinations <= 5:
 
     if user_answer == right_answer:
         print(
-            f"Good job! That was the {Format.underline + 'correct' + Format.end} answer.")
+            f"{(bcolors.BLUE + 'Good job!' + bcolors.RESET)} That was the {Format.underline + 'correct' + Format.end} answer.")
         text_effect(
             f"{player_name}, look ahead, it looks like the weather is in your favor.\n")
         co2_consumed += weather(True)
 
     elif user_answer != right_answer:
-        print(f"You answered {Format.underline + 'incorrectly.' + Format.end}")
+        print(f"You answered {bcolors.RED + 'incorrectly' + bcolors.RESET}")
         text_effect(
             f"{player_name}, not only you didn't answer correctly but also the weather has changed.\n")
         co2_consumed += weather(False)
@@ -316,11 +408,16 @@ while co2_consumed < co2_budget and destinations <= 5:
 else:
     # Check if players win or lost the game
     if co2_consumed >= co2_budget:
-        text_effect(
-            f"Oh, no! Your Co2 consumption level was {co2_consumed} units. This exceeds your budget.\nGAME OVER! Try again soon - Santa won't wait forever.")
+        text_effect(f"Oh, no! Your Co2 consumption level was {co2_consumed} units. This exceeds your budget.\nTry again soon - Santa won't wait forever.\n")
+        T = "GAME OVER"
+        ASCII_art_1 = pyfiglet.figlet_format(T)
+        print(bcolors.RED + ASCII_art_1 + bcolors.RESET)
     else:
         text_effect(
-            f"Congratulations! YOU WIN!\nYour flight is about to land with {co2_consumed} Co2 units consumed. You passed all the challenges and now Santa awaits.")
+            f"Congratulations!\nYour flight is about to land with {co2_consumed} Co2 units consumed. You passed all the challenges and now Santa awaits.\n")
+        C = "YOU WON!"
+        ASCII_art_1 = pyfiglet.figlet_format(C)
+        print(bcolors.BLUE + ASCII_art_1 + bcolors.RESET)
 
 
 # Store the player score in the database
@@ -349,7 +446,7 @@ def record_check():
         print(f"Player's name: {row[0]}, Score: {row[1]}")
     return
 
-ask_recording = input("\nDo you want to check top 5 best record (yes/no): ")
+ask_recording = input(f"\n{bcolors.GREEN + 'Do you want to check top 5 best record (yes/no): ' + bcolors.RESET}")
 ask_recording.lower()
 
 if ask_recording == "yes":
