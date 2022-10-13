@@ -10,7 +10,7 @@ connection = mysql.connector.connect(
     port=3306,
     database='game_project',
     user='root',
-    password='!QAZ2wsx#EDC',  # !QAZ2wsx#EDC or MyN3wP4ssw0rd ##CHECK PASSWORD TO RUN THE PROGRAM!!!
+    password='MyN3wP4ssw0rd',  # !QAZ2wsx#EDC or MyN3wP4ssw0rd ##CHECK PASSWORD TO RUN THE PROGRAM!!!
     autocommit=True
 )
 
@@ -261,11 +261,8 @@ def game_replay():
 
     municipality = input(bcolors.GREEN + 'From which city you want to start your journey: ' + bcolors.RESET)
 
-    while municipality.lower() == "rovaniemi":  # Player can't choose Rovaniemi as a starting point
+    while  check_city(municipality) == 0 or municipality.lower() == "rovaniemi": # Player can't choose Rovaniemi as a starting point
         municipality = input("Oops! You can't fly from this city. Another city please: ")
-        while check_city(municipality) == 0:
-            municipality = input("Oops! You can't fly from this city. Another city please: ")
-
     else:
         print("\nHere are your adventure starting point options: ")
         municipality_search(municipality)
@@ -384,8 +381,7 @@ def game_replay():
             user_answer = user_answer.lower()
 
         right_answer = answers[random_index_number]
-        questions.pop(
-            random_index_number)  # pop the question from the list to avoid duplicated question in next destination
+        questions.pop(random_index_number)  # pop the question from the list to avoid duplicated question in next destination
         answers.pop(random_index_number)
 
         # Check if players answer correct or not
@@ -448,8 +444,10 @@ def game_replay():
         cursor = connection.cursor()
         cursor.execute(sql)
         result = cursor.fetchall()
+        order = 0           #give the order 1-5
         for row in result:
-            print(f"Player's name: {row[0]}, Score: {row[1]}")
+            order +=1
+            print(f"{order}. Player: {row[0]}, Score: {row[1]}")
         return
 
     ask_recording = input(f"\n{bcolors.GREEN + 'Do you want to check top 5 best record (yes/no): ' + bcolors.RESET}")
@@ -457,8 +455,7 @@ def game_replay():
 
     if ask_recording == "yes":
         record_check()
-    else:
-        print("See you again!")
+
 
 
 # Ask players to replay the game
@@ -469,7 +466,7 @@ class bcolors:
     GREEN = '\033[92m'
     RESET = '\033[0m'
 
-replay_option = input(bcolors.GREEN + "Do you want to replay (y/n): " + bcolors.RESET)
+replay_option = input(bcolors.GREEN + "Do you want to restart the game? (y/n): " + bcolors.RESET)
 
 if replay_option.lower() == "y":
     game_replay()
