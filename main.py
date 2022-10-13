@@ -12,7 +12,7 @@ connection = mysql.connector.connect(
     port=3306,
     database='game_project',
     user='root',
-    password='MyN3wP4ssw0rd',  # MyN3wP4ssw0rd ##CHECK PASSWORD TO RUN THE PROGRAM!!!
+    password='MyN3wP4ssw0rd',  # !QAZ2wsx#EDC or MyN3wP4ssw0rd ##CHECK PASSWORD TO RUN THE PROGRAM!!!
     autocommit=True
 )
 def game_replay():
