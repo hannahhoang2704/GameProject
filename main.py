@@ -5,16 +5,15 @@ from geopy import distance
 import time, os, sys
 import pyfiglet
 
-
-
 connection = mysql.connector.connect(
     host='127.0.0.1',
     port=3306,
     database='game_project',
     user='root',
-    password='MyN3wP4ssw0rd',  # !QAZ2wsx#EDC or MyN3wP4ssw0rd ##CHECK PASSWORD TO RUN THE PROGRAM!!!
+    password='!QAZ2wsx#EDC',  # !QAZ2wsx#EDC or MyN3wP4ssw0rd ##CHECK PASSWORD TO RUN THE PROGRAM!!!
     autocommit=True
 )
+
 
 def game_replay():
     # Questionaires and answers
@@ -177,9 +176,10 @@ def game_replay():
     intro1 = f"Each year children from all over the world\nfly to {Format.underline + 'Rovaniemi' + Format.end} to meet {bcolors.BLUE + 'Santa' + bcolors.RESET}.\nBelievers to hug him and non-believers to expose him by pulling his beard. \n"
     text_effect(intro1)
 
-    intro2 = f"\nOn your way to Rovaniemi you will come across different challenges.\nOne of them is flight's {Format.underline + 'Co2 consumption.' + Format.end}\nYour main goal is to {Format.underline + 'keep Co2 consumption as low as possible.' + Format.end}\nMake sure it doesn't go over 10 000 units!\n"
+    intro2 = f"\nOn your way to Rovaniemi you will come across different challenges.\nOne of them is flight's {Format.underline + 'CO2 consumption.' + Format.end}\nYour main goal is to {Format.underline + 'keep CO2 consumption as low as possible.' + Format.end}\nMake sure it doesn't go over 10 000 units!\n"
     text_effect(intro2)
-
+    time.sleep(2)
+    clearScreen()
     text_effect("Your mission starts in 3..\n")
     print(bcolors.YELLOW + """                             ______
                                 _\ _~-\___
