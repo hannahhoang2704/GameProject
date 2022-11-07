@@ -143,3 +143,12 @@ alter table airport
 drop column wikipedia_link;
 alter table airport
 drop column keywords;
+create table score_change(
+	id int(11) DEFAULT NULL AUTO_INCREMENT,
+	treasure_name varchar(10) DEFAULT NULL,
+	score varchar(40) DEFAULT NULL,
+	PRIMARY KEY (id)
+	);
+
+insert into score_change (treasure_name, score)
+values ("Treasure 1", 200), ("Treasure 2", 1000), ("Treasure 3", 350), ("Treasure 4", 500), ("Treasure 5", 150), ("Robbery 1", -100), ("Robbery 2", -200), ("Robbery 3", 150);
