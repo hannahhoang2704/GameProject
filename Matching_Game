@@ -1,0 +1,132 @@
+import random
+
+TILE_IMAGES = ['*', '#', 'o', 'x', '+', '?', '%', '<', '!', '&',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+
+def select_tiles(number_of_tiles_in_row):
+    # Calculate the number of pairs
+    number_of_pairs = number_of_tiles_in_row * number_of_tiles_in_row // 2
+    # Select the images of the tiles from list TILE_IMAGES
+    pairs = TILE_IMAGES[0 : number_of_pairs] + TILE_IMAGES[0 : number_of_pairs]
+    # Shuffle the chosen tiles
+    random.shuffle(pairs)
+    tiles_list = []
+    # Arrange the tiles into a two-dimensional list
+    for i in range(0, len(pairs), number_of_tiles_in_row):
+        tiles_list.append(pairs[i : (i + number_of_tiles_in_row)])
+    return tiles_list
+
+def print_tiles(tiles_list):
+    mjono = ""
+    for i in range(len(tiles_list)+1):
+        mjono+=("{} ".format(i))
+    print(mjono)
+
+    rivi = 1
+    for i in tiles_list:
+        print(rivi, end=" ")
+        rivi += 1
+        for x in i:
+            print(x, end=" ")
+        print()
+    return
+
+#print_tiles([['!','_'],['_','*']])
+
+
+def flip_and_print_tiles(pair, tiles, opened_tiles):
+    opened_tiles[pair[0][0]][pair[0][1]] = tiles[pair[0][0]][pair[0][1]]
+    opened_tiles[pair[1][0]][pair[1][1]] = tiles[pair[1][0]][pair[1][1]]
+    print_tiles(opened_tiles)
+
+    if opened_tiles[pair[0][0]][pair[0][1]] == opened_tiles[pair[1][0]][pair[1][1]]:
+        return True, opened_tiles
+    else:
+        opened_tiles[pair[0][0]][pair[0][1]] = '_'
+        opened_tiles[pair[1][0]][pair[1][1]] = '_'
+        return False, opened_tiles
+
+#print(flip_and_print_tiles([[1,0],[1,1]], [['!','*'],['*','!']], [['_','_'],['_','_']]))
+
+def is_game_ended(opened_tiles):
+    for i in opened_tiles:
+        if '_' in i:
+            return False
+    return True
+
+
+def main():
+    seed_number = int(input("Enter a seed:\n"))
+    random.seed(seed_number)
+    player_1 = input("Enter the name of the 1st player.\n")
+    player_2 = input("Enter the name of the 2st player.\n")
+    tiles_in_row = int(input("Enter the number of tiles in a row (2, 4 or 6).\n"))
+    lista = select_tiles(tiles_in_row)
+
+    avaamattomat_kortit=[]
+    for i in range(tiles_in_row):
+        avaamattomat_kortit.append([])
+        for j in range(tiles_in_row):
+            avaamattomat_kortit[i].append('_')
+
+    pisteet={player_1:0, player_2:0}
+    current_player = player_2
+    uusi_vuoro=False
+
+    while not is_game_ended(avaamattomat_kortit):
+        if not uusi_vuoro:
+            if current_player == player_2:
+                current_player = player_1
+            else:
+                current_player = player_2
+        print("It's {}'s turn. Press enter to see the tiles.".format(current_player))
+        input()
+        print_tiles(avaamattomat_kortit)
+        print()
+        ok_arvot = False
+        while not ok_arvot:
+            ok_arvot = True
+            koordinaatti1 = input("Enter the coordinates of the first tile (row,column): ")
+            koordinaatti2 = input("Enter the coordinates of the second tile (row,column): ")
+            row1, col1 = koordinaatti1.split(',')
+            row2, col2 = koordinaatti2.split(',')
+
+            pair = [[int(row1)-1, int(col1)-1],[int(row2)-1, int(col2)-1]]
+            if koordinaatti1 == koordinaatti2:
+                ok_arvot = False
+            elif pair[0][0]<0 or pair[0][0]>=tiles_in_row:
+                ok_arvot = False
+            elif pair[0][1]<0 or pair[0][1]>=tiles_in_row:
+                ok_arvot = False
+            elif pair[1][0]<0 or pair[1][0]>=tiles_in_row:
+                ok_arvot = False
+            elif pair[1][1]<0 or pair[1][1]>=tiles_in_row:
+                ok_arvot = False
+            elif avaamattomat_kortit[pair[0][0]][pair[0][1]] != '_' or avaamattomat_kortit[pair[1][0]][pair[1][1]] != '_':
+                ok_arvot = False
+            if not ok_arvot:
+                print("Invalid input!")
+        print("Opening tiles...")
+        uusi_vuoro, avaamattomat_kortit = flip_and_print_tiles(pair, lista, avaamattomat_kortit)
+        if uusi_vuoro and is_game_ended(avaamattomat_kortit):
+            print("{} gets a point.".format(current_player))
+            pisteet[current_player] += 1
+        if uusi_vuoro and not is_game_ended(avaamattomat_kortit):
+            print("{} gets a point and takes another turn.". format(current_player))
+            pisteet[current_player] += 1
+            print("{} has {:d} point(s) and {} has {:d} point(s).". format(player_1, pisteet[player_1], player_2, pisteet[player_2]))
+        if not uusi_vuoro:
+            print("The tiles didn't match.")
+            print("{} has {:d} point(s) and {} has {:d} point(s).". format(player_1, pisteet[player_1], player_2, pisteet[player_2]))
+
+    if pisteet[player_1] == pisteet[player_2]:
+        print("{} has {:d} point(s) and {} has {:d} point(s).". format(player_1, pisteet[player_1], player_2, pisteet[player_2]))
+        print("It's a tie!")
+    elif pisteet[player_1] > pisteet[player_2]:
+        print("{} has {:d} point(s) and {} has {:d} point(s).". format(player_1, pisteet[player_1], player_2, pisteet[player_2]))
+        print("The winner is {}!". format(player_1))
+    else:
+        print("{} has {:d} point(s) and {} has {:d} point(s).". format(player_1, pisteet[player_1], player_2, pisteet[player_2]))
+        print("The winner is {}!".format(player_2))
+
+main()
