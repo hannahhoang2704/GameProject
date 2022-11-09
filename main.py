@@ -16,6 +16,7 @@ connection = mysql.connector.connect(
 
 replay_option = ""
 
+
 def game_replay():
     # Questionaires and answers
     questions = (
@@ -58,32 +59,6 @@ def game_replay():
                "true",  # 14
                "false")  # 15
 
-    # imports colors
-    class bcolors:
-        GREEN = '\033[92m'
-        RESET = '\033[0m'
-        YELLOW = '\033[93m'
-        RED = '\033[91m'
-        BLUE = '\033[94m'
-
-
-    ##ALL FUNCTIONS
-    # Function for underlying the text
-    class Format:
-        end = '\033[0m'
-        underline = '\033[4m'
-
-    # Function 1: for text effect
-    def text_effect(text):
-        for char in text:
-            sleep(0.1)
-            sys.stdout.write(char)
-    # used with text that will disappear
-
-
-    def clearScreen():
-        os.system("clear")
-
     # Function 2: check if the city exists in database
 
     def check_city(city):
@@ -125,7 +100,7 @@ def game_replay():
         result = cursor.fetchall()
         if cursor.rowcount > 0:
             for row in result:
-                text_effect(f"\n{player_name}, you are now in {row[0]}. Get ready for your flight!\n")
+                print(f"\n{player_name}, you are now in {row[0]}. Get ready for your flight!\n")
         return row[0]
 
     # Function 5: to measure the distance between the chosen airport to Rovaniemi airport
@@ -155,8 +130,8 @@ def game_replay():
         cursor.execute(sql, ran)
         result = cursor.fetchall()
         for i in result:
-            print(f"{Format.underline + 'Weather forecast:' + Format.end} {i[1]}.\n")
-            text_effect(f"That's why your CO2 will change by {i[0]} units.\n")
+            print(f"Weather forecast: + {i[1]}.")
+            print(f"That's why your CO2 will change by {i[0]} units.\n")
             co2_score = int(i[0])
         return co2_score
 
@@ -167,109 +142,69 @@ def game_replay():
         return dis_to_Rov
 
     def introduction():
-        W = "                   HO      HO      HO"
-        ASCII_art_1 = pyfiglet.figlet_format(W)
-        print(bcolors.BLUE + ASCII_art_1 + bcolors.RESET)
+        print("Ho Ho Ho")
 
         # PHASE1: Intro of the game & set a goal for players
 
-        intro1 = f"Each year children from all over the world\nfly to {Format.underline + 'Rovaniemi' + Format.end} to meet {bcolors.BLUE + 'Santa' + bcolors.RESET}.\nBelievers to hug him and non-believers to expose him by pulling his beard. \n"
-        text_effect(intro1)
+        intro1 = f"Each year children from all over the world\nfly to Rovaniemi to meet Santa\nBelievers to hug him and non-believers to expose him by pulling his beard. \n"
+        print(intro1)
 
-        intro2 = f"\nOn your way to Rovaniemi you will come across different challenges.\nOne of them is flight's {Format.underline + 'CO2 consumption.' + Format.end}\nYour main goal is to {Format.underline + 'keep CO2 consumption as low as possible.' + Format.end}\nMake sure it doesn't go over 10 000 units!\n"
-        text_effect(intro2)
-        time.sleep(2)
-        clearScreen()
-        text_effect("Your mission starts in 3..\n")
-        print(bcolors.YELLOW + """                             ______
-                                        _\ _~-\___
-                               =  = ==(____AA____D
-                                           \_____\___________________,-~~~~~~~`-.._
-                                           /     o O o o o o O O o o o o o o O o  |\_
-                                           `~-.__        ___..----..                  )
-                                                 `---~~\___________/------------`````
-                                                 =  ===(_________D
-            """ + bcolors.RESET)
-        time.sleep(1)
-        text_effect("2..\n")
-        print(bcolors.YELLOW + """                                                                  ______
-                                                                              _\ _~-\___
-                                                                      =  = ==(____AA____D
-                                                                                  \_____\___________________,-~~~~~~~`-.._
-                                                                                  /     o O o o o o O O o o o o o o O o  |\_
-                                                                                 `~-.__        ___..----..                  )
-                                                                                       `---~~\___________/------------`````
-                                                                                         =  ===(_________D
-            """ + bcolors.RESET)
+        intro2 = f"\nOn your way to Rovaniemi you will come across different challenges.\nOne of them is flight's CO2 consumption.\nYour main goal is to keep CO2 consumption as low as possible.\nMake sure it doesn't go over 10 000 units!\n"
+        print(intro2)
+        print("Your mission starts in 3..\n")
+        print("2")
+        print("1")
 
-        time.sleep(1)
-        text_effect("1..\n")
-        print(bcolors.YELLOW + """                                                                                                           ______
-                                                                                                                      _\ _~-\___
-                                                                                                              =  = ==(____AA____D
-                                                                                                                            \_____\___________________,-~~~~~~~`-.._
-                                                                                                                          /     o O o o o o O O o o o o o o O o  |\_
-                                                                                                                           `~-.__        ___..----..                  )
-                                                                                                                              `---~~\___________/------------`````
-                                                                                                                               =  ===(_________D
-            """ + bcolors.RESET)
-        time.sleep(1)
-        clearScreen()
-        clearScreen()
-        intro3 = (bcolors.GREEN + 'Firstly, do you believe in Santa Claus? ' + bcolors.RESET)
+        intro3 = ("Firstly, do you believe in Santa Claus?")
 
         while True:
             start = input(intro3)
             start = start.lower()
             if start == "no":
-                text_effect("\n***Me neither. Get ready for an adventure.***\n")
+                print("\n***Me neither. Get ready for an adventure.***\n")
                 break
             elif start == "yes":
-                text_effect(
+                print(
                     "\n***It's going to be an eye-opening experience for you. Let's go!***\n")
                 break
             else:
                 print("Just type yes or no. ")
 
-        text_effect("Lucky for you, there are other like-minded people out there. \n")
+        print("Lucky for you, there are other like-minded people out there. \n")
 
-        friends = input(bcolors.GREEN + "\nDo you want to meet them? " + bcolors.RESET)
+        friends = input("\nDo you want to meet them? ")
         friends = friends.lower()
 
         while friends != "yes" or friends != "no":
             if friends == "yes":
-                text_effect(
-                    f"\nI thought so.\nIn order to have them join you on your quest they will have {Format.underline + 'questions' + Format.end} for you.\n"
+                print(
+                    f"\nI thought so.\nIn order to have them join you on your quest they will have questions for you.\n"
                     f"Answer them correctly and you will save some C02!\n")
                 break
             elif friends == "no":
-                text_effect(
+                print(
                     "\nIf you don't care about meeting new friends, try to save some C02 during your flight\nby answering "
-                    f"{Format.underline + 'questions' + Format.end} correctly and {Format.underline + 'keep CO2 within the budget.' + Format.end}\n")
+                    f"questions correctly and keep CO2 within the budget.\n")
                 break
             friends = input("Just type yes or no! ")
             friends = friends.lower()
 
-        text_effect(
-            f"Before reaching the 1st destination, your C02 is {Format.underline + '5000 units.' + Format.end}\n")
-        time.sleep(2)
-        clearScreen()
-
+        print(
+            f"Before reaching the 1st destination, your C02 is 5000 units.\n")
 
     ##START THE GAME
     if replay_option.lower() != "y":
         introduction()
 
-
-
     # User input name and city
 
-    player_name = input(bcolors.GREEN + "Let's start with your name: " + bcolors.RESET)
+    player_name = input("Let's start with your name: ")
     player_name = player_name.capitalize()
 
-    municipality = input(bcolors.GREEN + 'From which city you want to start your journey: ' + bcolors.RESET)
+    municipality = input('From which city you want to start your journey: ')
 
-    while  check_city(municipality) == 0 or municipality.lower() == "rovaniemi": # Player can't choose Rovaniemi as a starting point
+    while check_city(
+            municipality) == 0 or municipality.lower() == "rovaniemi":  # Player can't choose Rovaniemi as a starting point
         municipality = input("Oops! You can't fly from this city. Another city please: ")
     else:
         print("\nHere are your adventure starting point options: ")
@@ -278,7 +213,7 @@ def game_replay():
     # Users choose the airport in the chosen city
 
     icao_selection = input(
-        f"You can see all the airports in your city above.\n{(bcolors.GREEN + 'Enter ICAO to choose the airport you want to fly: ' + bcolors.RESET)}  ")
+        f"You can see all the airports in your city above.\n(Enter ICAO to choose the airport you want to fly:)")
 
     while icao_selection.upper() not in icao_list:
         print("Oops! Check again the ICAO code. You can't arrive to the airport if you don't call ICAO code correctly!")
@@ -293,77 +228,9 @@ def game_replay():
     b = airport_position("EFRO")
     dist = distance.distance(a, b).km
     print(
-        f"\n{Format.underline + f'Distance between {airport_name} and Rovaniemi Airport is {dist:.2f}km.' + Format.end}\n")
+        f"'Distance between {airport_name} and Rovaniemi Airport is {dist:.2f}km.'\n")
 
-    time.sleep(3)
-    clearScreen()
-    clearScreen()
-
-    print("""Take-off in \n
-                                         333333333333333   
-                                        3:::::::::::::::33 
-                                        3::::::33333::::::3
-                                        3333333     3:::::3
-                                                    3:::::3
-                                                    3:::::3
-                                            33333333:::::3 
-                                            3:::::::::::3  
-                                            33333333:::::3 
-                                                    3:::::3
-                                                    3:::::3
-                                                    3:::::3
-                                        3333333     3:::::3
-                                        3::::::33333::::::3
-                                        3:::::::::::::::33 
-                                         333333333333333  
- """)
-
-    time.sleep(2)
-    clearScreen()
-    clearScreen()
-    print("""\n
-                                        222222222222222    
-                                        2:::::::::::::::22  
-                                        2::::::222222:::::2 
-                                        2222222     2:::::2 
-                                                    2:::::2 
-                                                    2:::::2 
-                                                 2222::::2  
-                                            22222::::::22   
-                                          22::::::::222     
-                                         2:::::22222        
-                                        2:::::2             
-                                        2:::::2             
-                                        2:::::2       222222
-                                        2::::::2222222:::::2
-                                        2::::::::::::::::::2
-                                        22222222222222222222  
-""")
-
-    time.sleep(2)
-    clearScreen()
-    clearScreen()
-    print("""\n         
-                                              1111111   
-                                             1::::::1   
-                                            1:::::::1   
-                                            111:::::1   
-                                               1::::1   
-                                               1::::1   
-                                               1::::1   
-                                               1::::l   
-                                               1::::l   
-                                               1::::l   
-                                               1::::l   
-                                               1::::l   
-                                            111::::::111
-                                            1::::::::::1
-                                            1::::::::::1
-                                            111111111111
-""")
-    time.sleep(2)
-    clearScreen()
-    clearScreen()
+    print("Take-off in 3...2...1")
 
     # PHASE 2: GAME START!
 
@@ -376,59 +243,51 @@ def game_replay():
 
     while co2_consumed < co2_budget and destinations <= 5:
         time.sleep(0.5)
-        text_effect(
-            f"You are approaching destination {destinations}. {(bcolors.GREEN + 'Answer the question: ' + bcolors.RESET)}\n")
+        print(f"You are approaching destination {destinations}. Answer the question:\n")
         # ask question & get point by answer
         random_index_number = random.randint(0, len(questions) - 1)
         user_answer = "0"
         while user_answer != "true" and user_answer != "false":
             print(questions[
                       random_index_number])  # call random question in questions list
-            user_answer = input(bcolors.GREEN + 'True or false: ' + bcolors.RESET)
-            time.sleep(2)
+            user_answer = input('True or false: ')
             user_answer = user_answer.lower()
 
         right_answer = answers[random_index_number]
-        questions.pop(random_index_number)  # pop the question from the list to avoid duplicated question in next destination
+        questions.pop(
+            random_index_number)  # pop the question from the list to avoid duplicated question in next destination
         answers.pop(random_index_number)
 
         # Check if players answer correct or not
 
         if user_answer == right_answer:
+            print(f"Good job! That was the correct answer.")
             print(
-                f"{(bcolors.BLUE + 'Good job!' + bcolors.RESET)} That was the {Format.underline + 'correct' + Format.end} answer.")
-            text_effect(
                 f"{player_name}, look ahead, it looks like the weather is in your favor.\n")
             co2_consumed += weather(True)
 
         elif user_answer != right_answer:
-            print(f"You answered {bcolors.RED + 'incorrectly' + bcolors.RESET}")
-            text_effect(
+            print(f"You answered incorrectly")
+            print(
                 f"{player_name}, not only you didn't answer correctly but also the weather has changed.\n")
             co2_consumed += weather(False)
 
-        text_effect(
-            f"{Format.underline + 'Your current CO2 is:' + Format.end} {co2_consumed} units\n")  # inform players their co2 score
+        print(f"Your current CO2 is: {co2_consumed} units\n")  # inform players their co2 score
         print(
             f"\nYou are {calc_distance_to_Rov(destinations, dist)} km away from Rovaniemi.\n")  # Inform players how far from that destination to Rovaniemi
-        time.sleep(3)
-        clearScreen()
+
         destinations += 1
 
     else:
         # Check if players win or lost the game
         if co2_consumed >= co2_budget:
-            text_effect(
+            print(
                 f"Oh, no! Your CO2 consumption level was {co2_consumed} units. This exceeds your budget.\nTry again soon - Santa won't wait forever.\n")
-            T = "GAME OVER"
-            ASCII_art_1 = pyfiglet.figlet_format(T)
-            print(bcolors.RED + ASCII_art_1 + bcolors.RESET)
+            print("Game Over")
         else:
-            text_effect(
+            print(
                 f"Congratulations!\nYour flight is about to land with {co2_consumed} CO2 units consumed. You passed all the challenges and now Santa awaits.\n")
-            C = "YOU WON!"
-            ASCII_art_1 = pyfiglet.figlet_format(C)
-            print(bcolors.BLUE + ASCII_art_1 + bcolors.RESET)
+            print("You won.")
 
     # Store the player score in the database
 
@@ -452,29 +311,23 @@ def game_replay():
         cursor = connection.cursor()
         cursor.execute(sql)
         result = cursor.fetchall()
-        order = 0           #give the order 1-5
+        order = 0  # give the order 1-5
         for row in result:
-            order +=1
+            order += 1
             print(f"{order}. Player: {row[0]}, Score: {row[1]}")
         return
 
-    ask_recording = input(f"\n{bcolors.GREEN + 'Do you want to check top 5 best record (yes/no): ' + bcolors.RESET}")
+    ask_recording = input(f"\nDo you want to check top 5 best record (yes/no): ")
     ask_recording.lower()
 
     if ask_recording == "yes":
         record_check()
 
 
-
 # Ask players to replay the game
 game_replay()
 
-
-class bcolors:
-    GREEN = '\033[92m'
-    RESET = '\033[0m'
-
-replay_option = input(bcolors.GREEN + "Do you want to restart the game? (y/n): " + bcolors.RESET)
+replay_option = input("Do you want to restart the game? (y/n): ")
 
 if replay_option.lower() == "y":
     game_replay()
