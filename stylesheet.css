@@ -127,19 +127,7 @@ header{
 
 
 /*Main game page*/
-/*.game-pg{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-            "navigation navigation"
-            "maps score"
-            "maps main-game"
-            "weather main-game";
-}
 
-.nav-area{
-    grid-area: navigation;
-}*/
 .main-program{
     padding: 10rem 2rem;
     display: grid;
@@ -166,4 +154,15 @@ header{
 .main-game{
     background-color: darkseagreen;
     grid-area: main-game;
+}
+
+/*Exit page*/
+
+.exit-page{
+    padding-top: 10rem;
+    text-align: center;
+}
+
+.exit-page img{
+    max-width: 40%;
 }
