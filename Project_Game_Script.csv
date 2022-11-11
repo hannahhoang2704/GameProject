@@ -124,8 +124,6 @@ drop column target_maxvalue;
 alter table goal
 drop column target_text;
 alter table airport
-drop column type;
-alter table airport
 drop column elevation_ft;
 alter table airport
 drop column iso_region;
