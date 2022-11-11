@@ -217,7 +217,7 @@ def game_replay():
 
     while icao_selection.upper() not in icao_list:
         print("Oops! Check again the ICAO code. You can't arrive to the airport if you don't call ICAO code correctly!")
-        icao_selection = str(input(bcolors.GREEN + 'Enter ICAO code again:' + bcolors.RESET))
+        icao_selection = str(input("Enter ICAO code again:")
     else:
         location = icao_selection.upper()  # store value of icao
         airport_name = call_airport(icao_selection)  # store airport name in a variable
