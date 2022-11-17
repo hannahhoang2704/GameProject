@@ -141,34 +141,3 @@ alter table airport
 drop column wikipedia_link;
 alter table airport
 drop column keywords;
-create table score_change(
-	id int(11) DEFAULT NULL AUTO_INCREMENT,
-	treasure_name varchar(10) DEFAULT NULL,
-	score varchar(40) DEFAULT NULL,
-	PRIMARY KEY (id)
-	);
-
-insert into score_change (treasure_name, score)
-values ("Treasure 1", 200), ("Treasure 2", 1000), ("Treasure 3", 350), ("Treasure 4", 500), ("Treasure 5", 150), ("Robbery 1", -100), ("Robbery 2", -200), ("Robbery 3", 150);
-
-SET FOREIGN_KEY_CHECKS = 0;
-delete from country  where type="small_airport";
-delete from country  where continent="OC";
-delete from country  where continent="NA";
-delete from country  where continent="AF";
-delete from country  where continent="AS";
-delete from country  where continent="SA";
-delete from country  where continent="AN";
-
-delete from airport  where continent="OC";
-delete from airport  where continent="NA";
-delete from airport where continent="AF";
-delete from airport  where continent="AS";
-delete from airport where continent="SA";
-delete from airport  where continent="AN";
-
-delete from airport  where type="small_airport";
-delete from airport  where type="closed";
-delete from airport  where type="heliport";
-
-SET FOREIGN_KEY_CHECKS = 1;
