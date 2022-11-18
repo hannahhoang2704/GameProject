@@ -149,7 +149,7 @@ create table score_change(
 	);
 
 insert into score_change (treasure_name, score)
-values ("Treasure 1", 200), ("Treasure 2", 1000), ("Treasure 3", 350), ("Treasure 4", 500), ("Treasure 5", 150), ("Robbery 1", -100), ("Robbery 2", -200), ("Robbery 3", 150);
+values ("Treasure 1", 200), ("Treasure 2", 1000), ("Treasure 3", 350), ("Treasure 4", 500), ("Treasure 5", 150), ("Robbery 1", -100), ("Robbery 2", -200), ("Robbery 3", -150);
 
 SET FOREIGN_KEY_CHECKS = 0;
 delete from country  where type="small_airport";
