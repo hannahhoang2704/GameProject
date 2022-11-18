@@ -35,14 +35,18 @@ def rock_paper_scissors():
         round = 1
 
         while round <= 3:
-            print(f"Round number : {round}/3.")
             option = [rock, paper, scissors]
             user_choice = int(input("Type 0 for Rock, 1 for Paper, 2 for Scissors\n"))
+            while user_choice != 0 and user_choice != 1 and user_choice != 2:
+                user_choice = int(input("Wrong input! Type 0 for Rock, 1 for Paper, 2 for Scissors\n"))
+                print(f"Round number : {round}/3.")
+
             print(option[user_choice])
 
 
             computer_choice = random.randint(0, len(option) - 1)
             print(option[computer_choice])
+            print(f"Round number : {round}/3.")
 
 
             if user_choice < computer_choice:
